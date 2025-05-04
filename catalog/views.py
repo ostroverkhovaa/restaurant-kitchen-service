@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
+from django.views import generic
 
 from .models import Cook, Dish, DishType
 
@@ -23,3 +25,10 @@ def index(request):
     }
 
     return render(request, "catalog/index.html", context=context)
+
+
+class DishTypeListView(LoginRequiredMixin, generic.ListView):
+    model = DishType
+    context_object_name = "dish_types"
+    template_name = "catalog/dish_type_list.html"
+    paginate_by = 5
