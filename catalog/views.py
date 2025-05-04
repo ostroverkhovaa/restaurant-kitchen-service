@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
@@ -9,7 +10,7 @@ from .models import Cook, Dish, DishType
 
 
 @login_required
-def index(request):
+def index(request: HttpRequest) -> HttpResponse:
     """View function for the home page of the site."""
 
     num_cooks = Cook.objects.count()
@@ -31,7 +32,7 @@ def index(request):
 
 class DishTypeListView(LoginRequiredMixin, generic.ListView):
     model = DishType
-    context_object_name = "dish_types"
+    context_object_name = "dish_type_list"
     template_name = "catalog/dish_type_list.html"
     paginate_by = 5
 
@@ -39,20 +40,21 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
 class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
     model = DishType
     fields = "__all__"
-    success_url = reverse_lazy("catalog:dish_type_list")
+    success_url = reverse_lazy("catalog:dish-type-list")
     template_name = "catalog/dish_type_form.html"
 
 
 class DishTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = DishType
     fields = "__all__"
-    success_url = reverse_lazy("catalog:dish_type_list")
+    success_url = reverse_lazy("catalog:dish-type-list")
     template_name = "catalog/dish_type_form.html"
 
 
 class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = DishType
-    success_url = reverse_lazy("catalog:dish_type_list")
+    fields = "__all__"
+    success_url = reverse_lazy("catalog:dish-type-list")
     template_name = "catalog/dish_type_confirm_delete.html"
 
 
@@ -106,5 +108,5 @@ class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
 class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Dish
     fields = "__all__"
-    success_url = reverse_lazy("catalog:dish_list")
+    success_url = reverse_lazy("catalog:dish-list")
     template_name = "catalog/dish_confirm_delete.html"
