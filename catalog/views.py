@@ -4,6 +4,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import generic
 
+from .forms import CookCreationForm, CookUpdateForm
 from .models import Cook, Dish, DishType
 
 
@@ -58,6 +59,28 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
 class CookListView(LoginRequiredMixin, generic.ListView):
     model = Cook
     paginate_by = 5
+
+
+class CookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Cook
+    queryset = Cook.objects.all().prefetch_related("dishes__dish_type")
+
+
+class CookCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Cook
+    form = CookCreationForm
+
+
+class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Cook
+    form = CookUpdateForm
+
+
+class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Cook
+    fields = "__all__"
+    success_url = reverse_lazy("catalog:cook_list")
+    template_name = "catalog/cook_confirm_delete.html"
 
 
 class DishListView(LoginRequiredMixin, generic.ListView):
