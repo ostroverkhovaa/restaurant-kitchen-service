@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -70,12 +70,12 @@ class CookDetailView(LoginRequiredMixin, generic.DetailView):
 
 class CookCreateView(LoginRequiredMixin, generic.CreateView):
     model = Cook
-    form = CookCreationForm
+    form_class = CookCreationForm
 
 
 class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Cook
-    form = CookUpdateForm
+    form_class = CookUpdateForm
 
 
 class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -97,12 +97,12 @@ class DishDetailView(LoginRequiredMixin, generic.DetailView):
 
 class DishCreateView(LoginRequiredMixin, generic.CreateView):
     model = Dish
-    form = DishForm
+    form_class = DishForm
 
 
 class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Dish
-    form = DishForm
+    form_class = DishForm
 
 
 class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
@@ -110,3 +110,14 @@ class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
     fields = "__all__"
     success_url = reverse_lazy("catalog:dish-list")
     template_name = "catalog/dish_confirm_delete.html"
+
+
+@login_required
+def dishes_by_type(request, pk=int):
+    dish_type = get_object_or_404(DishType, pk=pk)
+    dishes = dish_type.dishes.all()
+    context = {
+        'dish_type': dish_type,
+        'dishes': dishes,
+    }
+    return render(request, 'catalog/dishes_by_type.html', context)
