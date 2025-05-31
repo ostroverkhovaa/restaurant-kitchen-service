@@ -1,32 +1,85 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+{#<nav class="navbar navbar-expand-lg navbar-dark mb-0">#}
+{#  <div class="container-fluid">#}
+{#    <a class="navbar-brand h5" href="{% url "catalog:index" %}">Kitchen Service</a>#}
+{#      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"#}
+{#              data-bs-target="#navbarNav" aria-controls="navbarNav"#}
+{#              aria-expanded="false" aria-label="Toggle navigation">#}
+{#        <span class="navbar-toggler-icon"></span>#}
+{#      </button>#}
+{##}
+{#    <div class="collapse navbar-collapse" id="navbarNav">#}
+{#      <ul class="navbar-nav me-auto mb-0 mb-lg-0">#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link h5" href="{% url "catalog:dish-type-list" %}">Dish types</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link h5" href="{% url "catalog:dish-list" %}">Dishes</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link h5" href="{% url "catalog:cook-list" %}">Cooks</a>#}
+{#        </li>#}
+{#      </ul>#}
+{#      <ul class="navbar-nav ml-auto">#}
+{#        {% if user.is_authenticated %}#}
+{#          <li class="nav-item">#}
+{#            <a class="nav-link h5" href="#">{{ user.username }}</a>#}
+{#          </li>#}
+{#          <li class="nav-item">#}
+{#            <a class="nav-link h5" href="{% url "logout" %}">Logout</a>#}
+{#          </li>#}
+{#        {% else %}#}
+{#          <li class="nav-item">#}
+{#            <a class="nav-link h5" href="{% url "login" %}">Login</a>#}
+{#          </li>#}
+{#        {% endif %}#}
+{#      </ul>#}
+{#    </div>#}
+{#  </div>#}
+{#</nav>#}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url "catalog:index" %}">Kitchen Service</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-              data-bs-target="#navbarNav" aria-controls="navbarNav"
-              aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+    <a class="navbar-brand" href="{% url 'catalog:index' %}">Kitchen Service</a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="{% url "catalog:dish-type-list" %}">Dish types</a>
+          <a class="nav-link{% if request.path == "/dish-types/" %} active{% endif %}"
+             href="{% url "catalog:dish-type-list" %}">
+            Dish types
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url "catalog:dish-list" %}">Dishes</a>
+          <a class="nav-link{% if request.path == "/dishes/" %} active{% endif %}"
+             href="{% url "catalog:dish-list" %}">
+            Dishes
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url "catalog:cook-list" %}">Cooks</a>
+          <a class="nav-link{% if request.path == "/cooks/" %} active{% endif %}"
+             href="{% url "catalog:cook-list" %}">
+            Cooks
+          </a>
         </li>
       </ul>
-      <ul class="navbar-nav ml-auto">
+
+      <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
         {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link" href="#">{{ user.username }}</a>
+            <a class="nav-link" href="{% url "catalog:cook-detail" pk=user.id %}">{{ user.username }}</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url "logout" %}">Logout</a>
-          </li>
+          <form method="post" action="{% url 'logout' %}" class="nav-link">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-link nav-link"
+                    style="padding: 0; border: none;
+                    background: none;">Logout</button>
+          </form>
         {% else %}
           <li class="nav-item">
             <a class="nav-link" href="{% url "login" %}">Login</a>
