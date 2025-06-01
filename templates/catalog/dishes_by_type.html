@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+  <title>Dishes: {{ dish_type.name }}</title>
+{% endblock %}
+
+{% block content %}
+  <header class="text-white py-4">
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+        <h1 class="display-4 fw-bold">
+          Dishes of type: <span class="text-beige">{{ dish_type.name }}</span>
+        </h1>
+        <a href="{% url "catalog:dish-type-list" %}" class="btn btn-outline-light btn-sm">
+          ← Back to Dish Types
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="container py-5">
+    {% if dishes %}
+      <div class="row justify-content-center">
+        {% for dish in dishes %}
+          <div class="col-12 col-md-8 mb-4 mx-auto">
+            <div class="card card-body blur shadow-blur text-white border-0 text-center d-flex flex-column align-items-center">
+              <h4 class="text-beige mb-3" style="font-size: 1.75rem;">{{ dish.name }}</h4>
+              <p class="text-light mb-3" style="font-size: 1.1rem; max-width: 600px;">
+                {{ dish.description|truncatechars:100 }}
+              </p>
+              {% if dish.cooks.all %}
+                <p class="mb-2" style="font-size: 1.05rem;">
+                  <strong>Cooks:</strong>
+                  {% for cook in dish.cooks.all %}
+                    <span class="badge badge-secondary mx-1">{{ cook.username }}</span>
+                  {% endfor %}
+                </p>
+              {% else %}
+                <p class="text-white-50">No cooks assigned.</p>
+              {% endif %}
+              <a href="{% url "catalog:dish-detail" pk=dish.id %}" class="btn btn-sm btn-outline-light mt-2">
+                View Details
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="row justify-content-center">
+        <div class="col-8 col-md-6 mx-auto">
+          <div class="card card-body blur shadow-blur text-white border-0 text-center d-flex flex-column align-items-center">
+            <h5 class="text-white-50 mb-0">No dishes found for this type.</h5>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}
