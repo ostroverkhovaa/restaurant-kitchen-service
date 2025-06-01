@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views import generic
 
@@ -156,3 +156,15 @@ def dishes_by_type(request, pk=int):
         'dishes': dishes,
     }
     return render(request, 'catalog/dishes_by_type.html', context)
+
+
+@login_required
+def toggle_cook(request, pk=int):
+    user = request.user
+    dish = Dish.objects.get(pk=pk)
+    if request.method == "POST":
+        if dish.cooks.filter(id=user.id).exists():
+            dish.cooks.remove(user)
+        else:
+            dish.cooks.add(user.id)
+    return redirect("catalog:dish-detail", pk=pk)
