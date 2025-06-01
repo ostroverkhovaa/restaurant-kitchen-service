@@ -99,7 +99,7 @@ class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
 class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Cook
     fields = "__all__"
-    success_url = reverse_lazy("catalog:cook_list")
+    success_url = reverse_lazy("catalog:cook-list")
     template_name = "catalog/cook_confirm_delete.html"
 
 
