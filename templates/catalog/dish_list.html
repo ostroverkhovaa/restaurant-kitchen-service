@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block title %}
+  <title>Dishes</title>
+{% endblock %}
+
+{% block content %}
+  <header class="text-white text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Dishes</h1>
+      <p class="lead">Create new dishes or customize existing ones.</p>
+      <a class="btn btn-outline-light btn-sm" href="{% url "catalog:dish-create" %}">Add New Dish</a>
+    </div>
+  </header>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10">
+        <div class="card card-body blur shadow-blur text-white border-0 text-center">
+          <form method="get" action="" class="d-flex flex-column align-items-center mb-4">
+            <div class="w-100" style="max-width: 400px;">
+              {{ search_form|crispy }}
+            </div>
+            <button type="submit" class="btn btn-outline-light mt-2">🔎 Search</button>
+          </form>
+
+          {% if dish_list %}
+            <div class="row justify-content-center">
+              {% for dish in dish_list %}
+                <div class="col-12 col-md-8 mb-4 mx-auto">
+                  <div class="card card-body blur shadow-blur text-white border-0 text-center d-flex flex-column align-items-center">
+                    <h4 class="text-beige mb-3" style="font-size: 1.75rem;"><em>{{ dish.name }}</em> &mdash; ${{ dish.price }}</h4>
+                    <p class="text-light mb-2" style="font-size: 1.1rem; max-width: 600px;">
+                      {{ dish.dish_type }}
+                    </p>
+                    <p class="text-white-50 mb-2">{{ dish.description|truncatechars:100 }}}</p>
+                    {% if dish.cooks.all %}
+                      <p class="mb-2" style="font-size: 1.05rem;">
+                        <strong>Cooks:</strong>
+                        {% for cook in dish.cooks.all %}
+                          <span class="badge badge-secondary mx-1">{{ cook.username }}</span>
+                        {% endfor %}
+                      </p>
+                    {% else %}
+                      <p class="text-white-50">No cooks assigned.</p>
+                    {% endif %}
+                    <a href="{{ dish.get_absolute_url }}" class="btn btn-sm btn-outline-light mt-2">
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="row justify-content-center">
+              <div class="col-8 col-md-6 mx-auto">
+                <div class="card card-body blur shadow-blur text-white border-0 text-center d-flex flex-column align-items-center">
+                  <h5 class="text-white-50 mb-0">No dishes found.</h5>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
