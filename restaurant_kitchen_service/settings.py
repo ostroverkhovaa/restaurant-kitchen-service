@@ -12,15 +12,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-2t=+akb4sx=y=*-65bq_pvasiz8#28af#1@&oxi-sr6h9t554m"
+SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -76,6 +75,8 @@ TEMPLATES = [
     },
 ]
 
+CRISPY_TEMPLATE_PACK="bootstrap4"
+
 WSGI_APPLICATION = "restaurant_kitchen_service.wsgi.application"
 
 
@@ -110,6 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = "catalog.Cook"
 
+LOGIN_REDIRECT_URL = "/"
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -137,7 +140,3 @@ ASSETS_ROOT = "/static/assets"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-CRISPY_TEMPLATE_PACK="bootstrap4"
-
-LOGIN_REDIRECT_URL = '/'
