@@ -58,6 +58,17 @@ class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
     template_name = "catalog/dish_type_confirm_delete.html"
 
 
+class DishesByTypeView(LoginRequiredMixin, generic.DetailView):
+    model = DishType
+    template_name = "catalog/dishes_by_type.html"
+    context_object_name = "dish_type"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["dishes"] = self.object.dishes.all()
+        return context
+
+
 class CookListView(LoginRequiredMixin, generic.ListView):
     model = Cook
     paginate_by = 5
@@ -145,17 +156,6 @@ class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
     fields = "__all__"
     success_url = reverse_lazy("catalog:dish-list")
     template_name = "catalog/dish_confirm_delete.html"
-
-
-@login_required
-def dishes_by_type(request, pk=int):
-    dish_type = get_object_or_404(DishType, pk=pk)
-    dishes = dish_type.dishes.all()
-    context = {
-        'dish_type': dish_type,
-        'dishes': dishes,
-    }
-    return render(request, 'catalog/dishes_by_type.html', context)
 
 
 @login_required
