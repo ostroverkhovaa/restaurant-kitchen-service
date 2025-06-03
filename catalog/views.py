@@ -159,7 +159,7 @@ class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
 
 
 @login_required
-def toggle_cook(request, pk=int):
+def toggle_cook(request, pk: int):
     user = request.user
     dish = Dish.objects.get(pk=pk)
     if request.method == "POST":
