@@ -42,3 +42,10 @@ python manage.py createsuperuser
 
 6. Start the server
 python manage.py runserver
+
+👤 Test User
+
+Use the following credentials to log in as a test user:
+
+Login: user
+Password: user12345
