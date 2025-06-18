@@ -3,6 +3,8 @@
 A Django web app for managing a restaurant’s kitchen operations — 
 including dish management, cook assignments, and dish type classification.
 
+🔗 Live Demo: https://restaurant-kitchen-service-s44d.onrender.com
+
 📦 Features
 
 - Full CRUD for:
